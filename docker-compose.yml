@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  # Development setup with hot reloading
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "3001:3001"  # Web app (dev port)
+      - "3000:3000"  # Server
+    environment:
+      - NODE_ENV=development
+    command: bun run dev
+    networks:
+      - app-network
+
+  # Production web application
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: web-runner
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # Production server application
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: server-runner
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # Full-stack application (both web and server in one container)
+  fullstack:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: fullstack
+    ports:
+      - "3001:3001"
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # Database (if needed for local development)
+  # Uncomment if you need a local database
+  # db:
+  #   image: postgres:15
+  #   environment:
+  #     POSTGRES_DB: your_db_name
+  #     POSTGRES_USER: your_user
+  #     POSTGRES_PASSWORD: your_password
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+# volumes:
+#   postgres_data: 
