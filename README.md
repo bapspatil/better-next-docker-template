@@ -2,6 +2,8 @@
 
 A production-ready, containerized full-stack TypeScript application built with modern technologies and optimized for Docker deployment. This project demonstrates best practices for containerizing Next.js and Hono applications in a monorepo setup.
 
+This template is scaffolded by [Better-T Stack](https://better-t-stack.amanv.dev/), a modern CLI for scaffolding end-to-end type-safe TypeScript projects, built by [@amanvarshney01](https://x.com/amanvarshney01).
+
 ## 🐳 Docker-First Architecture
 
 This repository is specifically designed for containerization and provides multiple deployment strategies:
