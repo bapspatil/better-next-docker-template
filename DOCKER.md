@@ -14,7 +14,7 @@ Builds only the Next.js web application with standalone output.
 docker build -f apps/web/Dockerfile -t better-next-docker-web .
 
 # Run web app
-docker run -p 3000:3000 better-next-docker-web
+docker run -p 3001:3001 better-next-docker-web
 ```
 
 #### Server Application (`apps/server/Dockerfile`)
@@ -25,7 +25,7 @@ Builds only the Bun-based server application.
 docker build -f apps/server/Dockerfile -t better-next-docker-server .
 
 # Run server
-docker run -p 8000:8000 better-next-docker-server
+docker run -p 3000:3000 better-next-docker-server
 ```
 
 ### 2. Multi-Stage Root Dockerfile
@@ -35,19 +35,19 @@ The root `Dockerfile` provides multiple build targets:
 #### Build Web Application Only
 ```bash
 docker build --target web-runner -t better-next-docker-web .
-docker run -p 3000:3000 better-next-docker-web
+docker run -p 3001:3001 better-next-docker-web
 ```
 
 #### Build Server Application Only
 ```bash
 docker build --target server-runner -t better-next-docker-server .
-docker run -p 8000:8000 better-next-docker-server
+docker run -p 3000:3000 better-next-docker-server
 ```
 
 #### Build Full-Stack Application (Both Web + Server)
 ```bash
 docker build --target fullstack -t better-next-docker-fullstack .
-docker run -p 3000:3000 -p 8000:8000 better-next-docker-fullstack
+docker run -p 3001:3001 -p 3000:3000 better-next-docker-fullstack
 ```
 
 ## Docker Compose Configurations
@@ -61,7 +61,7 @@ docker-compose up dev
 
 This will:
 - Mount your source code for hot reloading
-- Run on ports 3001 (web) and 8000 (server)
+- Run on ports 3001 (web) and 3000 (server)
 - Enable development environment
 
 ### Production - Separate Services
@@ -143,8 +143,8 @@ docker build --target server-runner -t better-next-docker-server .
 
 ## Port Configuration
 
-- **Web Application**: Port 3000 (production), Port 3001 (development)
-- **Server Application**: Port 8000
+- **Web Application**: Port 3001 (production), Port 3001 (development)
+- **Server Application**: Port 3000
 - **Database** (if used): Port 5432 (commented out in docker-compose.yml)
 
 ## Security Considerations
@@ -163,7 +163,7 @@ docker build --target server-runner -t better-next-docker-server .
 
 ### Runtime Issues
 1. Verify environment variables are set correctly
-2. Check port availability (3000, 8000)
+2. Check port availability (3001, 3000)
 3. Ensure database connections (if applicable) are configured
 
 ### Performance Optimization
